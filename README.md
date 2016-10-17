@@ -4,30 +4,30 @@
 
 ### 主要有以下四块内容
 
-### 1.Ajax 初级实战
+#### 1.Ajax 初级实战
 - Ajax 是什么？
 - 应用实例展示
 - XMLHttpRequest
 - Ajax 实例代码
 
-### 2.jQuery Ajax 应用实战
+#### 2.jQuery Ajax 应用实战
 - 快捷 API 介绍
 - Ajax API 介绍
 - 各个 Api 实例 
 
-### 3.Ajax 跨域实战
+#### 3.Ajax 跨域实战
 - 跨域知识介绍
 - 跨域环境搭建及实例
 - iframe 跨子域实例
 - JSONP 原理及实例
 - CORS 原理及实例 
 
-### 4.Ajax 异步文件上传实战
+#### 4.Ajax 异步文件上传实战
 - XMLHttpRequest2 方式介绍及实例
 
 
 ### 运行方法
 - 安装 Node.js 环境
-- 在 package.json 同级目录运行 `npm install`
-- 运行服务器 `node app.js`
-- 打开浏览 `http://127.0.0.1` 
+- 在 package.json 同级目录的命令行输入: `npm install`
+- 启动本地服务器: `node app.js`
+- 打开浏览访问: `http://127.0.0.1` 
