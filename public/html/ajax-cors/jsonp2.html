@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jsonp</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+<h1>JSONP 实现</h1>
+
+<h3>动态生成 <code>&lt;script&gt;</code></h3>
+<button class="btn btn-primary btn-lg btn-block" onclick="calltest();">调用测试</button>
+<hr/>
+
+<h1>jQuery 对 JSONP 的支持</h1>
+<h3>getJSON(url, data, callback);</h3>
+<button class="btn btn-info btn-lg btn-block" onclick="testGetJson();">test getJSON</button>
+
+<h3> Ajax 指定返回 JSONP 类型</h3>
+<button class="btn btn-success btn-lg btn-block" onclick="testAjaxJsonp();">test ajax jsonp</button>
+<h3>jsonpCallback 参数</h3>
+<button class="btn btn-warning btn-lg btn-block" onclick="testArgs();">test args</button>
+
+<hr/>
+<h1>JSONP 缺点</h1>
+<h3>只支持 get 方式</h3>
+<h3>后端代码要调整</h3>
+</div>
+<script>
+    function jsonp(url, data, callback) {
+        var script = document.createElement('script');
+        document.body.appendChild(script);
+
+        data = data || {};
+        data.callback = 'cb' + new Date().getTime();
+        window[data.callback] = callback;
+
+        url += '?' + $.param(data);// 参数序列化
+        // console.log('url: ' +url);
+
+        script.src = url;
+        script.onload = function () {
+            document.body.removeChild(script);
+        }
+
+    }
+
+    function calltest() {
+        jsonp('http://b.test.com/testjsonp2', {test: 'ok'}, function (data) {
+            console.log(data);
+        });
+    }
+
+    function testGetJson() {
+        $.getJSON('http://b.test.com/testjsonp2?callback=?', {test: 'ok'}, function(data) {
+           console.log(data);
+        });
+    }
+
+    function testAjaxJsonp() {
+        $.ajax('http://b.test.com/testjsonp2?callback=?', {
+            dataType: 'jsonp'
+        }).done(function(data) {
+            console.log(data);
+        });
+    }
+
+    function testArgs() {
+        $.ajax('http://b.test.com/testjsonp3', {
+            dataType: 'jsonp',
+            jsonp: 'cbname',
+            jsonpCallback: 'cbfun',
+            cache: true,
+            success: function(data) {
+                console.log(data);
+            }
+        });
+    }
+</script>
+</body>
+</html>

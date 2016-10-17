@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Ajax</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+    <div class="page-header">
+        <h1>JQuery Ajax</h1>
+    </div>
+
+    <p>
+        <button type="button" class="btn btn-primary btn-lg btn-block" onclick="ajax_01()">$.ajax(url, [settings])</button>
+    </p>
+
+    <p>
+        <button type="button" class="btn btn-success btn-lg btn-block" onclick="ajax_02()">$.ajax(settings)，此时 url 是 settings 中的一个属性</button>
+    </p>
+        
+    <p>
+        <button type="button" class="btn btn-info btn-lg btn-block" onclick="ajax_03()">处理响应结果的回调函数 success、error、statusCode、complete</button>
+    </p>    
+
+    <p>
+        <button type="button" class="btn btn-danger btn-lg btn-block" onclick="ajax_04()">async</button>
+    </p>    
+
+    <p>
+        <button type="button" class="btn btn-warning btn-lg btn-block" onclick="ajax_05()">前置处理：beforeSend</button>
+    </p>
+
+</div>
+<script>
+    function ajax_01() {
+        $.ajax('/jquery-ajax', {
+            success: function(data) {
+                console.log('$.ajax(url, [settings]): ' + data);
+            }
+        });
+    }
+    function ajax_02() {
+        $.ajax({
+            url: '/jquery-ajax',
+            success: function(data) {
+                console.log('$.ajax(settings): ' + data);
+            }
+        });
+    }
+    function ajax_03() {
+        $.ajax('/allusers', {
+            success: function (data) {
+                console.log(JSON.stringify(data));
+                //console.log('success: %o',arguments);
+            },
+            dataType: 'json',
+            // 预处理服务器返回数据，返回结果可以在 success 中得到
+            dataFilter: function(data, type) {
+                console.log('data: '+data);
+                console.log('type: ' + type);
+                var tmp =  JSON.parse(data);
+                return tmp.length;
+            },
+            error: function (jqXHR, textStatus, err) {
+                // jqXHR: jQuery 增强的 xhr
+                // textStatus: 请求完成状态
+                // err: 底层通过 throw 抛出的异常对象，类型与值与错误类型有关
+                console.log(arguments);
+            },
+            complete: function (jqXHR, textStatus) {
+                // jqXHR: jQuery 增强的 xhr
+                // textStatus: 请求完成状态 success | error
+                console.log('statusCode: %d, statusText: %s', jqXHR.status, jqXHR.statusText);
+                console.log('textStatus: %s', textStatus);
+            },
+            statusCode: {
+                '403': function (jqXHR, textStatus, err) {
+                    console.log(arguments);
+                    console.log('status code 403');
+                },
+                '400': function () {
+                    console.log('status code 400');
+                }
+            }
+        });
+    }
+
+    function ajax_04() {
+        var d = 0;
+        $.ajax('/time', {
+            //cache: false,
+            async: true,
+            //ifModified: true,
+            success: function (data) {
+                alert('success: ' + data);
+                d = data;
+            }
+        });
+        alert('after ajax: ' + d);
+    }
+
+    function ajax_05() {
+        $.ajax('/allusers', {
+            // headers:　{test: 'lll', ttt: '33'},
+            beforeSend: function (jqXHR, settings) {
+                console.log(arguments);
+                console.log('beforeSend');
+                jqXHR.setRequestHeader('test', 'haha');
+                jqXHR.testData = {a: 1, b: 2};
+            },
+            success: function (data) {
+                console.log(data);
+            },
+
+            complete: function (xhr) {
+                console.log(xhr);
+                console.log(xhr.testData);
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

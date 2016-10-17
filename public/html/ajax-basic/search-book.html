@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ajax</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+    <div class="page-header">
+        <h1>XMLHttpReqeust 实战</h1>
+    </div>
+
+    <div class="tab-pane fade in " id="Book">
+        <h3 class="text-info">输入要搜索的书名</h3>
+            <input type="text" class="form-control" id="keyword" placeholder="Search for...">
+            <ul id="hits" style="display: none;"></ul>
+    </div>
+</div>
+
+
+<script>
+    // 注意：代码和样式不兼容低版本IE
+    // 通过 ajax 获取命中提示内容
+    document.getElementById('keyword').oninput = function () {
+        var keyword = this.value;
+        // 典型的 ajax 编程模板
+        // 创建 XMLHttpReqeust 对象
+        var xhr = new XMLHttpRequest();
+        // open 操作初始化请求信息
+        xhr.open('GET', '/book?keyword=' + encodeURIComponent(keyword), true);
+        // xhr.setRequestHeader("Content-Type", "application/json");
+        // 设置自定域方法
+        xhr.setRequestHeader('ajax-book', 'jesse');
+        // 超时设置
+        xhr.timeout = 3000;
+        xhr.ontimeout = function() {
+            console.log('timeout!');
+        }
+        // 仅xhr level 2 支持
+        xhr.onload = function() {
+            if (xhr.status == 200){
+                console.log('load, %s', xhr.responseText);
+            }
+        }
+
+        // 监听事件处理响应结果
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                handleResult(xhr.responseText);
+
+                console.log(xhr.responseText);
+                console.log(xhr.getAllResponseHeaders());
+                console.log(xhr.getResponseHeader("Content-Type"));
+                console.log(xhr.status);
+                console.log(xhr.statusText);
+
+                // readyState 5种状态
+                // 0: 未初始化
+                // 1：连接建立、请求发出
+                // 2: 服务器返回响应
+                // 3: 交互（处理响应数据）
+                // 4: 完成，数据可交付客户端使用 
+                // console.log('onreadystatechange: readyState:%d, status:%d, responseText:%s', xhr.readyState, xhr.status, xhr.responseText);
+            }
+        };
+        // send 操作发出请求
+        xhr.send(null);
+        console.log('after xhr.send()');
+    };
+    
+    // 处理响应结果
+    function handleResult(ret) {
+        ret = JSON.parse(ret);
+        var domHits = document.getElementById('hits');
+        if (ret.length) {
+            var lis = [];
+            for (var i = 0, len = ret.length; i < len; ++i) {
+                lis.push('<li>' + ret[i] + '</li>');
+            }
+            domHits.innerHTML = lis.join('');
+            domHits.style.display = 'block';
+        } else {
+            domHits.innerHTML = '';
+            domHits.style.display = 'none';
+        }
+    }
+    // 单击提示结果放入输入框
+    document.getElementById('hits').onclick = function (event) {
+        document.getElementById('keyword').value = event.target.innerHTML;
+        this.style.display = 'none';
+    }
+</script>
+</body>
+</html>
+

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Ajax</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="page-header text-center">
+            <h1>个人信息登记</h1>
+        </div>
+        <form class="form-horizontal" id="regForm" onsubmit="return submitFrom()">
+
+        <div class="form-group">
+            <label class="control-label col-sm-2">注册手机号: </label>
+            <div class="col-sm-8">
+                <input name="name1" maxlength="11" class="form-control" type="text"  >
+            </div>
+        </div>        
+
+        <div class="form-group">
+            <label class="control-label col-sm-2">用户名: </label>
+            <div class="col-sm-8">
+                <input name="name2" class="form-control" type="text"  >
+            </div>
+        </div>        
+
+        <div class="form-group">
+            <label class="control-label col-sm-2">英文名: </label>
+            <div class="col-sm-8">
+                <input name="name3" class="form-control" type="text"  >
+            </div>
+        </div>        
+
+        <div class="form-group">
+            <label class="control-label col-sm-2">身份证号: </label>
+            <div class="col-sm-8">
+                <input name="name4" maxlength="18" class="form-control" type="text"  >
+            </div>
+        </div>        
+
+        <div class="form-group">
+            <label class="control-label col-sm-2">婚姻状况: </label>
+            <div class="col-sm-8">
+                <input name="name5" class="form-control" type="text"  >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-2">工作单位: </label>
+            <div class="col-sm-8">
+                <input name="name6" class="form-control" type="text"  >
+            </div>
+        </div>  
+
+        <div class="form-group">
+            <label class="control-label col-sm-2">邮箱: </label>
+            <div class="col-sm-8">
+                <input name="name7" class="form-control" type="text"  >
+            </div>
+        </div>  
+
+        <div class="form-group">
+            <label class="control-label col-sm-2">家庭住址: </label>
+            <div class="col-sm-8">
+                <input name="name8" class="form-control" type="text"  >
+            </div>
+        </div>        
+
+        <div class="form-group">
+            <label class="control-label col-sm-2">邮编: </label>
+            <div class="col-sm-8">
+                <input name="name9" class="form-control" type="text"  >
+            </div>
+        </div>        
+
+        <div class="form-group">
+            <div class="row">
+                
+                <div class="col-xs-offset-2 col-xs-2">
+                    <button  class="btn btn-danger btn-lg">Cancel</button>
+                </div>
+
+                <div class="col-xs-offset-4 col-xs-2">
+                    <button  class="btn btn-primary btn-lg">Confirm</button>
+                </div>
+            </div>
+
+        </div>
+
+        </form>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">信息提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h2 class="text-danger text-center">该手机号已经被注册了!</h2>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function submitFrom(){
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: '/register',
+                data: $('#regForm').serialize(), // 你的formid
+                async: false,
+                error: function(request) {
+                    alert("Connection error");
+                },
+                success: function(data) {
+                    console.log(data);
+                    // $('#myModal').modal('show');
+                    alert(data);
+                }
+            });
+            return false;// 返回 false 组织页面刷新
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CORS</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>CORS 原理</h1>
+        <h2>xhr level2 支持的新标准，允许发起 ajax 请求 CORS 需要浏览器和服务器同时支持。目前，所有浏览器都支持该功能，IE 浏览器不能低于 IE10</h2>
+        
+        <h3 class="text-info">但是为了跨域安全，需要在服务器响应头部提供一些信息，供浏览器校验请求是否被允许</h3>
+        <ul>
+            <li class="text-success">Access-Control-Allow-Origin</li>
+            <li class="text-primary">Access-Control-Allow-Methods</li>
+            <li class="text-warning">Access-Control-Allow-Headers</li>
+        </ul>
+        
+        <button class="btn btn-primary btn-lg btn-block" onclick="crossAjax();">CORS TEST</button>
+
+        <hr/>
+
+        <h1>CORS 头信息通用设置方法</h1>
+        <p><a target="_blank" href='http://enable-cors.org/server.html'>http://enable-cors.org/server.html</a></p>
+    </div>
+
+    <script>
+    function crossAjax() {
+        $.ajax('http://b.test.com/cors', {
+            type: 'PUT',
+            headers: {
+                test: 'haha'
+            }
+        }).done(function(data) {
+            alert(data);
+        });
+    }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,20 @@
+body {
+    font-family: "Microsoft Yahei", sans-serif;
+    margin: 20px;
+}
+
+h3 {
+    font-size: 15px;
+    font-weight: bolder;
+}
+
+#hits {
+/*	position: absolute;*/
+	list-style: none;
+/*	margin: 0;
+	padding: 0;*/
+	text-align: left;
+/*	border: 1px solid gray;*/
+	border-top: none;
+/*	width: 398px;*/
+}

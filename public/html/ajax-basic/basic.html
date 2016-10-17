@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Ajax</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <h1>XMLHttpReqeust Basic</h1>
+    </div>
+
+	<p>
+        <button type="button" class="btn btn-primary btn-lg btn-block" onclick="makeRequest('test.html')">Request Html</button>
+    </p>
+
+    <p>
+        <button type="button" class="btn btn-success btn-lg btn-block" onclick="makeRequest('test.xml')">Request Xml</button>
+    </p>    
+
+<!--     <p>
+        <button type="button" class="btn btn-warning btn-lg btn-block" onclick="makeRequest('/test.html','jesse')">Request Html With Password</button>
+    </p> -->
+    
+<script type="text/javascript">
+	var http_request = false;
+
+    function makeRequest(url,user) {
+
+        http_request = false;
+
+        if (window.XMLHttpRequest) { // Mozilla, Safari,...
+            http_request = new XMLHttpRequest();
+            if (http_request.overrideMimeType) {
+                if(url.includes('.xml')){
+                    http_request.overrideMimeType('text/xml');
+                }else{
+                    http_request.overrideMimeType('text/html');
+                }
+            }
+        } else if (window.ActiveXObject) { // IE
+            try {
+                http_request = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    http_request = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) {}
+            }
+        }
+
+        if (!http_request) {
+            alert('Giving up :( Cannot create an XMLHTTP instance');
+            return false;
+        }
+        http_request.onreadystatechange = alertContents;
+        if(user){
+            http_request.open('GET', url, true,user,'12345678');
+        }else{
+            http_request.open('GET', url, true);
+        }
+        http_request.send(null);
+
+    }
+
+    function alertContents() {
+
+        if (http_request.readyState == 4) {
+            if (http_request.status == 200) {
+            	var xmldoc,root_node,
+                    contentType = http_request.getResponseHeader('Content-Type');
+
+            	if(contentType.includes('xml')){
+	            	xmldoc = http_request.responseXML;
+					root_node = xmldoc.getElementsByTagName('root').item(0);
+					console.log('responseXML: ' + root_node.firstChild.data);
+            	}else{
+                	console.log('responseText: ' + http_request.responseText);
+            	}
+
+            } else {
+                console.log('There was a problem with the request.');
+            }
+        }
+
+    }
+// https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest
+// https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest
+// 
+
+// 请求
+// GET / HTTP/1.1
+
+// GET 表示请求提交的方法，常见的有GET、POST两种
+// / 表示请求的资源路径，当前为根路径
+// HTTP/1.1 表示浏览器支持的协议版本，有1.1和1.0两种版本
+
+// Host: localhost
+// 请求的主机
+
+// Content-Type: application/json
+// 请求体的格式类型
+
+// GET请求没有请求体
+// POST 请求体格式与Content-Type有关，
+// 常见值有application/x-www-form-urlencoded
+//      application/json, application/xml
+//      multipart/form-data
+     
+
+// 响应
+// HTTP/1.1 200 ok
+
+// HTTP/1.1 表示服务器支持的协议版本
+// 200 表示响应状态码，200表示成功
+// 其它常见状态码 
+// 301，302 重定向 ，后面会跟一个Location头，指明跳转位置
+// 304 从浏览器缓存加载
+// 403 权限不够，拒绝访问
+// 404 资源未找到
+// 500 服务器内部错误，通常是后端程序发生的错误
+
+
+// Content-Type: text/html, image/png, application/json 等等,表明返回类型
+// Content-length: 响应Body长度
+
+// 发生重定向时包含的头，这时候一般没有Body
+// Location: http://localhost/other/resource
+</script>
+</div>
+</body>
+</html>

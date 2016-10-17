@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>sub domain</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>设置跨域模拟环境</h1>
+        <h3>修改 C:\Windows\System32\drivers\etc\hosts文件</h3>
+        <h3>DNS 解析过程 hosts -> DNS Server</h3>
+        <hr />
+
+        <h1>跨域限制</h1>
+        <button class="btn btn-primary btn-lg btn-block" onclick="crossAjax();">跨域请求</button>
+        <hr />
+
+        <h1>跨子域 ajax</h1>
+        <h3>ajax 不允许跨子域，但 iframe 可以，通过 iframe 协助完成跨子域操作</h3>
+        <iframe id="bfrm" style="display:none;" src="http://b.test.com/html/ajax-cors/cors_sub_domain.html"></iframe>
+        <button class="btn-lg btn-block btn btn-info" onclick="crossSubDomain();">跨子域请求</button>
+        <hr />
+    </div>
+
+    <script>
+    function crossAjax() {
+        var url = 'http://b.test.com/cors';
+        // var url = '/cors';
+        $.ajax(url).done(function(data) {
+            alert(data);
+        }).fail(function() {
+            alert('请求失败');
+        });
+    }
+
+    function crossSubDomain() {
+        document.domain = 'test.com'; // 提升域
+        // 调用 http://b.test.com/html/ajax-cors/cors_sub_domain.html 页面中的函数 doAjax
+        window.frames['bfrm'].contentWindow.doAjax(function(data) {
+            alert(data);
+        });
+    }
+    </script>
+</body>
+
+</html>
