@@ -44,7 +44,7 @@ router.all('/book', function(req, resp) {
         keyword = req.body.keyword;
     }
     var retlist = select(keyword);
-    console.log('keyword: ' + req.query.keyword + ' queryBody: ' + JSON.stringify(req.body));
+    // console.log('keyword: ' + req.query.keyword + ' queryBody: ' + JSON.stringify(req.body));
 
     // 可以设置服务器响应时间
     setTimeout(function() {
@@ -159,32 +159,12 @@ router.all('/testjsonp3', function(req, res) {
 
 
 // ajax 文件上传
-// 使用 multipartMiddleware 中间件
-// router.post('/upload',multipartMiddleware,function(req, res) {
-//     console.log(req.body);
-//     console.log(req.files);
-
-//     // 实际编程时，一般要将临时文件移动到目标位置，之后删除临时文件
-//     // 课程中为简化操作，直接将临时文件当成目标文件
-//     var fpath = req.files.myfile.path;
-//     var fname = fpath.substr(fpath.lastIndexOf('\\') + 1);
-
-//     res.json({fname: fname});
-
-//     // 删除临时文件
-//     fs.unlink(fpath,function(err){
-//         if(err){
-//             console.log(JSON.stringify(err));
-//         }
-//         console.log('delete success');
-//     });
-
-// });
-
 // 使用 multer 中间件
 // 这里设置了指接收 单个文件
 router.post('/upload', upload.single('uploadFlile'), function(req, res) {
-    console.log(req.file);
+    console.log('ip: ' + req.ip)
+    console.log('file info: ',req.file);
+    console.log('------------------------------------------------\n\n');
     //console.log(req.body);
     res.json({
         fileName: req.file.originalname

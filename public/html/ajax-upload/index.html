@@ -1,43 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>Ajax</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="../../css/bootstrap.min.css">
     <link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="../../css/main.css">
-
     <script src="../../js/jquery.min.js"></script>
     <script src="../../js/bootstrap.min.js"></script>
 </head>
+
 <body>
     <div class="container">
-    <div class="page-header">
-        <h1>Ajax 上传文件</h1>
+        <div class="page-header">
+            <h1>Ajax 上传文件</h1>
+        </div>
+        <h3>关键过程：</h3>
+        <p>1、创建 FormData，放入待上传文件</p>
+        <p>2、通过 xhr 操作将 FormData 发送到服务器，实现文件上传</p>
+        <p>3、绑定 progress、load、error 等事件监听传输过程并在页面显示动态交互信息</p>
+        <div>
+            <p id="upfile">附件：
+                <input type="file" id="myfile" style="display: inline">
+            </p>
+            <p id="upbtn">
+                <input class="btn btn-primary btn-lg btn-block" style="padding-left:50px;padding-right: 50px;" type="button" value="异步上传" onclick="upload();">
+                <span id="uptxt" style="display: none">正在上传...</span>
+                <span id="upprog"></span>
+                <button id="stopbtn" style="display:none;">停止上传</button>
+            </p>
+        </div>
+        <div id="flist" style="border:1px dotted darkgray;"></div>
     </div>
-
-    <h3>关键过程：</h3>
-    <p>1、创建 FormData，放入待上传文件</p>
-    <p>2、通过 xhr 操作将 FormData 发送到服务器，实现文件上传</p>
-    <p>3、绑定 progress、load、error 等事件监听传输过程并在页面显示动态交互信息</p>
-
-    <div>
-        <p id="upfile">附件： <input type="file" id="myfile" style="display: inline"></p>
-        <p id="upbtn">
-            <input class="btn btn-primary btn-lg btn-block" style="padding-left:50px;padding-right: 50px;" type="button" value="异步上传" onclick="upload();">
-            <span id="uptxt" style="display: none">正在上传...</span>
-            <span id="upprog"></span>
-            <button id="stopbtn" style="display:none;">停止上传</button>
-        </p>
-    </div>
-
-    <div id="flist" style="border:1px dotted darkgray;"></div>
-</div>
-<script>
+    <script>
     function upload() {
 
         var uploadFile = $("#myfile")[0].files;
-        if(uploadFile.length < 1){
+        if (uploadFile.length < 1) {
             console.warn('please select file to upload!!!');
             return;
         }
@@ -66,8 +67,8 @@
             $("#upprog").text('开始上传');
 
             $("#stopbtn").one('click', function() {
-               xhr.abort();
-               $(this).hide();
+                xhr.abort();
+                $(this).hide();
             });
 
             loading(true);
@@ -75,7 +76,7 @@
 
         // ajax 过程成功完成事件
         xhr.onload = function(event) {
-            if(xhr.responseText.indexOf('Error:') !== -1){
+            if (xhr.responseText.indexOf('Error:') !== -1) {
                 console.warn(xhr.responseText);
                 $("#upprog").text('上传的文件超过限制');
                 return;
@@ -85,7 +86,6 @@
             console.log('load success');
             $("#upprog").text('上传成功');
             console.log(event);
-            //addToFlist("C:\\Users\\QasimQiu\\AppData\\Local\\Temp\\"+ret.fileName);
         };
 
         // ajax 过程发生错误事件
@@ -101,7 +101,7 @@
         };
 
         // loadend 传输结束，不管成功失败都会被触发
-        xhr.onloadend = function (event) {
+        xhr.onloadend = function(event) {
             console.log('load end');
             loading(false);
         };
@@ -111,13 +111,13 @@
         xhr.send(fd);
     }
 
-    
+
     function addToFlist(fname) {
         var temp = ["<p id='" + fname + "'>",
-                    fname,
+            fname,
             "<button onclick='delFile(\"" + fname + "\");'>删除</button>",
-                    "</p>"
-                    ];
+            "</p>"
+        ];
         $("#flist").append(temp.join(""));
     }
 
@@ -134,6 +134,7 @@
             $("#stopbtn").hide();
         }
     }
-</script>
+    </script>
 </body>
+
 </html>
